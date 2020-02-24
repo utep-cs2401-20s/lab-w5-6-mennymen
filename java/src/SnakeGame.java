@@ -58,6 +58,11 @@ public class SnakeGame {
 
                     positionAndLength[0] = i;
                     positionAndLength[1] = j;
+                    positionAndLength[2] = length;
+                    System.out.println(positionAndLength[0]);
+                    System.out.println(positionAndLength[1]);
+                    System.out.println(exhaustiveChecks);
+                    return positionAndLength;
                 }
                 neighbors = 0;
             }
@@ -71,56 +76,17 @@ public class SnakeGame {
     }
 
     public int[] findTailRecursive(){
-        this.resetCounters();
-        this.recursiveChecks++;
-        int neighbors = 0;
-        int[] previousHead = {-1,-1};
-        int[] positionAndLength = new int[3];
-
-        //above
-        if(this.headPosition[0] != 0 && this.game[this.headPosition[0]-1][this.headPosition[1]]                 ){
-            neighbors++;
-            previousHead[0] = headPosition[0];
-            previousHead[1] = headPosition[1];
-            headPosition[0]--;
-        }
-
-        //below
-        else if(this.headPosition[0] != game.length-1 && this.game[this.headPosition[0]+1][this.headPosition[1]]) {
-            neighbors++;
-            previousHead[0] = headPosition[0];
-            previousHead[1] = headPosition[1];
-            headPosition[0]++;
-        }
-
-        //right
-        else if(this.headPosition[1] != game.length-1 && this.game[this.headPosition[0]][this.headPosition[1]+1]) {
-            neighbors++;
-            previousHead[0] = headPosition[0];
-            previousHead[1] = headPosition[1];
-            headPosition[1]++;
-        }
-
-        //left
-        else if(this.headPosition[0] != 0 && this.game[this.headPosition[0]][this.headPosition[1]-1]) {
-            neighbors++;
-            previousHead[0] = headPosition[0];
-            previousHead[1] = headPosition[1];
-            headPosition[1]--;
-        }
-
-        if(neighbors == 0) {
-            positionAndLength[0] = headPosition[0];
-            positionAndLength[1] = headPosition[1];
-            positionAndLength[2] = 1;
-            return positionAndLength;
-        }
-
-
-
+       this.resetCounters();
+       int[] position = findTailRecursive(headPosition, findFalse());
+       int[] positionAndLength = new int[3];
+       positionAndLength[0] = position[0];
+       positionAndLength[1] = position[0];
+       positionAndLength[2] = findLength();
+       System.out.println(positionAndLength[2]);
+       return positionAndLength;
     }
 
-    private int[] findTailRecursive(int[] currentPosition, int[] previousPosition){
+    int[] findTailRecursive(int[] currentPosition, int[] previousPosition){
         recursiveChecks++;
         int neighbors = 0;
         int[] tailPosition = new int[2];
@@ -131,7 +97,6 @@ public class SnakeGame {
             previousPosition[0] = currentPosition[0];
             previousPosition[1] = currentPosition[1];
             currentPosition[0]--;
-
         }
 
         //below
@@ -165,10 +130,7 @@ public class SnakeGame {
             System.out.println(tailPosition[1]);
             return tailPosition;
         }
-
         return findTailRecursive(currentPosition, previousPosition);
-
-
     }
 
 
@@ -184,6 +146,33 @@ public class SnakeGame {
 
     private static int getRecursiveChecks(){
         return recursiveChecks;
+    }
+
+    public int findLength(){
+        int length = 0;
+        for(int i = 0; i < this.game.length; i++) {
+            for (int j = 0; j < this.game[i].length; j++) {
+                if (game[i][j]) {
+                    length++;
+                }
+            }
+        }
+        return length;
+    }
+
+    public int[] findFalse(){
+        int[] valueFalse = new int[2];
+        for(int i = 0; i < this.game.length; i++) {
+            for (int j = 0; j < this.game[i].length; j++) {
+                if (!game[i][j]) {
+                    valueFalse[0] = i;
+                    valueFalse[1] = j;
+                    return valueFalse;
+                }
+            }
+        }
+        return valueFalse;
+
     }
 
 

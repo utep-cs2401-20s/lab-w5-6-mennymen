@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Test;
 public class SnakeGameTester {
     boolean[][] newGame1 = {{true, true, true},
                             {true, false, true},
-                            {true, true, false}};
+                            {true, false, false}};
     int[] headPosition = {0,2};
     int[] current = {0,0};
     int[] previous = {0, 1};
