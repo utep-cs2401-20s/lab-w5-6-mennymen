@@ -20,12 +20,13 @@ public class SnakeGame {
         }
     }
 
-
     public int[] findTailExhaustive(){
+        //Reset counters from previous method call
         this.resetCounters();
-        int neighbors = 0;
+        int neighbors;
         int length = 0;
         int[] positionAndLength = new int[3];
+        //check each value in the 2D array
         for(int i = 0; i < this.game.length; i++) {
             for(int j = 0; j < this.game[i].length; j++){
                 exhaustiveChecks++;
@@ -36,60 +37,59 @@ public class SnakeGame {
                     if(i == this.headPosition[0] && j == this.headPosition[1])
                         continue;
 
-                    //check for neighbors
-                    //above
-                    if(i != 0 && game[i - 1][j])
-                        neighbors++;
-
-                    //below
-                    if(i != game.length - 1 && game[i + 1][j])
-                        neighbors++;
-
-                    //right
-                    if(j != game[i].length - 1 && game[i][j+1])
-                        neighbors++;
-
-                    //left
-                    if(j != 0 && game[i][j - 1])
-                        neighbors++;
+                    neighbors = this.findNeighbors(i,j);
 
                     if(neighbors > 1)
                         continue;
 
                     positionAndLength[0] = i;
                     positionAndLength[1] = j;
-                    positionAndLength[2] = length;
-                    System.out.println(positionAndLength[0]);
-                    System.out.println(positionAndLength[1]);
-                    System.out.println(exhaustiveChecks);
-                    return positionAndLength;
+                    //CHECAR ESTOOOOOOOOOOOOO
+                    //positionAndLength[2] = length;
+
+                    //I know I don't have to print position and length
+                    //I did it to make it easier to visualize what the method returns
                 }
                 neighbors = 0;
             }
         }
-        System.out.println(length);
-        System.out.println(exhaustiveChecks);
+
+        //checar exhaustive checks****************************************************
+        exhaustiveChecks -= length;
+        positionAndLength[2] = length;
+
+        //I just print these to make it easier to visualize when I'm testing
         System.out.println(positionAndLength[0]);
         System.out.println(positionAndLength[1]);
-        positionAndLength[2] = length;
+        System.out.println(length);
+        System.out.println(exhaustiveChecks);
         return positionAndLength;
     }
 
     public int[] findTailRecursive(){
+        //Reset counters from previous method call
        this.resetCounters();
+       //I used a false position as my previous position as using the head or null gave me a stack overflow error
        int[] position = findTailRecursive(headPosition, findFalse());
        int[] positionAndLength = new int[3];
        positionAndLength[0] = position[0];
-       positionAndLength[1] = position[0];
-       positionAndLength[2] = findLength();
+       positionAndLength[1] = position[1];
+       //Here I find the length with the helper method I created
+       positionAndLength[2] = this.findLength();
+       //Again, just printed to visualize
        System.out.println(positionAndLength[2]);
        return positionAndLength;
     }
 
-    int[] findTailRecursive(int[] currentPosition, int[] previousPosition){
+    private int[] findTailRecursive(int[] currentPosition, int[] previousPosition){
+        //Increase recursive checks at the start of every iteration
         recursiveChecks++;
         int neighbors = 0;
         int[] tailPosition = new int[2];
+
+        //I know I have the findNeighbors method but here I also care that the
+        //position I am going to check is not the previous position,
+        //that is why I did not use the findNeighbors method here
 
         //above
         if((currentPosition[0] != 0) && (this.game[currentPosition[0] - 1][currentPosition[1]]) && (currentPosition[0] - 1 != previousPosition[0])){
@@ -100,7 +100,7 @@ public class SnakeGame {
         }
 
         //below
-        else if((currentPosition[0] != game.length-1) && (this.game[currentPosition[0] + 1][currentPosition[1]]) && (currentPosition[0] + 1 != previousPosition[0])){
+        else if((currentPosition[0] != game[0].length-1) && (this.game[currentPosition[0] + 1][currentPosition[1]]) && (currentPosition[0] + 1 != previousPosition[0])){
             neighbors++;
             previousPosition[0] = currentPosition[0];
             previousPosition[1] = currentPosition[1];
@@ -108,7 +108,7 @@ public class SnakeGame {
         }
 
         //right
-        else if((currentPosition[1] != game.length-1) && (this.game[currentPosition[0]][currentPosition[1] + 1]) && (currentPosition[1] + 1 != previousPosition[1])){
+        else if((currentPosition[1] != game[0].length-1) && (this.game[currentPosition[0]][currentPosition[1] + 1]) && (currentPosition[1] + 1 != previousPosition[1])){
             neighbors++;
             previousPosition[0] = currentPosition[0];
             previousPosition[1] = currentPosition[1];
@@ -123,6 +123,10 @@ public class SnakeGame {
             currentPosition[1]--;
         }
 
+        //Since each I'm not counting the previous state,
+        //each part of the body will have one neighbor at most
+
+        //Base case:
         if(neighbors == 0) {
             tailPosition[0] = currentPosition[0];
             tailPosition[1] = currentPosition[1];
@@ -132,8 +136,6 @@ public class SnakeGame {
         }
         return findTailRecursive(currentPosition, previousPosition);
     }
-
-
 
     public void resetCounters() {
         exhaustiveChecks = 0;
@@ -148,6 +150,7 @@ public class SnakeGame {
         return recursiveChecks;
     }
 
+    //Created a helper method to find snake's length
     public int findLength(){
         int length = 0;
         for(int i = 0; i < this.game.length; i++) {
@@ -160,6 +163,8 @@ public class SnakeGame {
         return length;
     }
 
+    //Created a helper method to find any false value
+    //I use this method in the recursive call and use it as the previous state
     public int[] findFalse(){
         int[] valueFalse = new int[2];
         for(int i = 0; i < this.game.length; i++) {
@@ -172,8 +177,29 @@ public class SnakeGame {
             }
         }
         return valueFalse;
-
     }
 
+    //Created a helped method to find neighbors
+    public int findNeighbors(int i, int j){
 
+        int neighbors = 0;
+
+        //above
+        if (i != 0 && game[i - 1][j])
+            neighbors++;
+
+        //below
+        if (i != game.length - 1 && game[i + 1][j])
+            neighbors++;
+
+        //right
+        if (j != game[i].length - 1 && game[i][j + 1])
+            neighbors++;
+
+        //left
+        if (j != 0 && game[i][j - 1])
+            neighbors++;
+
+        return neighbors;
+    }
 }
