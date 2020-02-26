@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 public class SnakeGameTester {
 
     //This case tests an instance where the tail is at 0,0 and the head is somewhere else
+    //Both test cases passed
     boolean[][] newGame1 = {{true, true, false,false},
                             {false, true, true,false},
                             {false, false, true, false},
@@ -23,6 +24,7 @@ public class SnakeGameTester {
     }
 
     //In this test case, the head is at 0,0 and the tail is somewhere else
+    //Both test cases passed
     boolean[][] newGame2 = {{true, false, true,true},
                             {true, false, false,true},
                             {true, false, true, true},
@@ -42,6 +44,7 @@ public class SnakeGameTester {
 
 
     //This test has a snake that goes around the grid in no ordered manner
+    //Both test cases passed
     boolean[][] newGame3 = {{false, true, true,true,true},
                             {true, false, false,false,true},
                             {true, false, true, true,true},
@@ -61,6 +64,7 @@ public class SnakeGameTester {
     }
 
     //This test has the snake in a spiral
+    //Both test cases passed
     boolean[][] newGame4 = {{true, true, true,true,true},
                             {true, false, false,false,true},
                             {true, false, true, false,true},
@@ -80,6 +84,7 @@ public class SnakeGameTester {
     }
 
     //This test has a longer snail going around the grid by the edges and inside the grid to check for all directions for neighbors
+    //Both test cases passed
     boolean[][] newGame5 = {{true, true, true, true, false, false},
                             {true, false, false, true, false, false},
                             {true, true, false, true, false, false},
@@ -100,7 +105,8 @@ public class SnakeGameTester {
         assertArrayEquals(game5.findTailRecursive(), new int[] {5, 2, 19});
     }
 
-    //This test checks a board where the snake's head is also the tail
+    //This test checks a board where the snake's head is also the tail (length is only 1)
+    //Both test cases passed
     boolean[][] newGame6 = {{false, false, false, false, false, false},
                             {false, false, false, false, false, false},
                             {false, false, true, false, false, false},
