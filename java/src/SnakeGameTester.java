@@ -58,7 +58,6 @@ public class SnakeGameTester {
     @Test
     public void findTailRecursive3(){
         assertArrayEquals(game3.findTailRecursive(), new int[] {1, 0, 15});
-        game3.findTailRecursive();
     }
 
     //This test has the snake in a spiral
@@ -68,16 +67,16 @@ public class SnakeGameTester {
                             {true, false, true, false,true},
                             {true, true, true,false,true}};
     int[] headPosition4 = {4,4};
-    SnakeGame game4 = new SnakeGame(newGame4,4,4, headPosition4);
+    SnakeGame game4 = new SnakeGame(newGame4,2,2, headPosition4);
 
     @Test
     public void findTailExhaustive4() {
-        assertArrayEquals(game4.findTailExhaustive(), new int[] {2, 2, 17});
+        assertArrayEquals(game4.findTailExhaustive(), new int[] {4, 4, 17});
     }
 
     @Test
     public void findTailRecursive4(){
-        assertArrayEquals(game4.findTailRecursive(), new int[] {2, 2, 17});
+        assertArrayEquals(game4.findTailRecursive(), new int[] {4, 4, 17});
     }
 
     //This test has a longer snail going around the grid by the edges and inside the grid to check for all directions for neighbors
@@ -100,4 +99,27 @@ public class SnakeGameTester {
     public void findTailRecursive5(){
         assertArrayEquals(game5.findTailRecursive(), new int[] {5, 2, 19});
     }
+
+    //This test checks a board where the snake's head is also the tail
+    boolean[][] newGame6 = {{false, false, false, false, false, false},
+                            {false, false, false, false, false, false},
+                            {false, false, true, false, false, false},
+                            {false, false, false, false, false, false},
+                            {false, false, false, false, false, false},
+                            {false, false, false, false, false, false}};
+
+    int[] headPosition6 = {2,2};
+    SnakeGame game6 = new SnakeGame(newGame6,2,2, headPosition6);
+
+    @Test
+    public void findTailExhaustive6() {
+        assertArrayEquals(game6.findTailExhaustive(), new int[] {2, 2, 1});
+    }
+
+    @Test
+    public void findTailRecursive6() {
+        assertArrayEquals(game6.findTailRecursive(), new int[]{2, 2, 1});
+    }
+
+
 }

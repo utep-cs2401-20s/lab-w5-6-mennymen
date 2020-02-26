@@ -25,49 +25,51 @@ public class SnakeGame {
         this.resetCounters();
         int neighbors;
         int length = 0;
+        boolean keepCounting = true;
         int[] positionAndLength = new int[3];
         //check each value in the 2D array
         for(int i = 0; i < this.game.length; i++) {
             for(int j = 0; j < this.game[i].length; j++){
-                exhaustiveChecks++;
+                if(keepCounting) {
+                    exhaustiveChecks++;
+                }
                 if(game[i][j]) {
                     length++;
 
-                    //check for head
-                    if(i == this.headPosition[0] && j == this.headPosition[1])
-                        continue;
-
                     neighbors = this.findNeighbors(i,j);
+
+                    //check for head and if the snake's length is only 1
+                    if(i == this.headPosition[0] && j == this.headPosition[1] && neighbors == 0) {
+                        positionAndLength[0] = i;
+                        positionAndLength[1] = j;
+                        keepCounting = false;
+                    }
 
                     if(neighbors > 1)
                         continue;
 
-                    positionAndLength[0] = i;
-                    positionAndLength[1] = j;
-                    //CHECAR ESTOOOOOOOOOOOOO
-                    //positionAndLength[2] = length;
-
-                    //I know I don't have to print position and length
-                    //I did it to make it easier to visualize what the method returns
+                    if(i != this.headPosition[0] || j != this.headPosition[1] && neighbors == 1) {
+                        positionAndLength[0] = i;
+                        positionAndLength[1] = j;
+                        keepCounting = false;
+                    }
                 }
                 neighbors = 0;
             }
         }
-
-        //checar exhaustive checks****************************************************
-        exhaustiveChecks -= length;
         positionAndLength[2] = length;
 
-        //I just print these to make it easier to visualize when I'm testing
-        System.out.println(positionAndLength[0]);
-        System.out.println(positionAndLength[1]);
-        System.out.println(length);
-        System.out.println(exhaustiveChecks);
+        //I know I don't have to print position and length
+        //I did it to make it easier to visualize what the method returns
+        System.out.println("X position: " + positionAndLength[0]);
+        System.out.println("Y position: " + positionAndLength[1]);
+        System.out.println("Snake Length: " + length);
+        System.out.println("Exhaustive Checks: "+ getExhaustiveChecks());
         return positionAndLength;
     }
 
     public int[] findTailRecursive(){
-        //Reset counters from previous method call
+       //Reset counters from previous method call
        this.resetCounters();
        //I used a false position as my previous position as using the head or null gave me a stack overflow error
        int[] position = findTailRecursive(headPosition, findFalse());
@@ -77,7 +79,8 @@ public class SnakeGame {
        //Here I find the length with the helper method I created
        positionAndLength[2] = this.findLength();
        //Again, just printed to visualize
-       System.out.println(positionAndLength[2]);
+       System.out.println("Snake Length: " + positionAndLength[2]);
+       System.out.println("Recurisve Checks: " + getRecursiveChecks());
        return positionAndLength;
     }
 
@@ -130,8 +133,8 @@ public class SnakeGame {
         if(neighbors == 0) {
             tailPosition[0] = currentPosition[0];
             tailPosition[1] = currentPosition[1];
-            System.out.println(tailPosition[0]);
-            System.out.println(tailPosition[1]);
+            System.out.println("X position: " + tailPosition[0]);
+            System.out.println("Y position: " + tailPosition[1]);
             return tailPosition;
         }
         return findTailRecursive(currentPosition, previousPosition);
@@ -142,11 +145,11 @@ public class SnakeGame {
         recursiveChecks = 0;
     }
 
-    private static int getExhaustiveChecks(){
+    public static int getExhaustiveChecks(){
         return exhaustiveChecks;
     }
 
-    private static int getRecursiveChecks(){
+    public static int getRecursiveChecks(){
         return recursiveChecks;
     }
 
